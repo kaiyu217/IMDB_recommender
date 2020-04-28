@@ -87,11 +87,28 @@ from scipy.spatial import distance
 
 #这里的input_data_trained是随便生成的，实际中应该是用户INPUT之后模型训练完的一个特征向量
 #注意需要大小为 1 X 135
-input_data_trained=np.zeros(135) 
-input_data_trained[5:20]=0.995
+#input_data_trained=np.zeros(135) 
+#input_data_trained[5:20]=0.995
+text =input("Pls input sth")
+
+tokens = word_tokenize(text)
+
+stop_words = set(stopwords.words('english'))
+tokens = [w for w in tokens if not w in stop_words]
+new_text=" ".join([i.strip() for i in tokens])
+new_text=[new_text]
+vectorizer = TfidfVectorizer()
+vectorizer.fit(new_text)
+
+vector = vectorizer.transform([new_text[0]])
+print(vector.toarray())
+b=vector.toarray().reshape(-1,1)
+if len(c)<=135: 
+    for i in range(0,135-len(c)):
+        c=np.append(c,[0])
+    b=b.reshape(-1,1) 
 
 i=0
-b=input_data_trained.reshape(-1,1)
 
 # 为了保证余弦对数据敏感，用a和b减去自身的平均数后再算余弦相似度（1-COSINE DISTANCE)
 b=b-b.mean()
